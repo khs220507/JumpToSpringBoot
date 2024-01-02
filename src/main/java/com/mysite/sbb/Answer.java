@@ -29,9 +29,5 @@ public class Answer {
 	
 	@ManyToOne
 	private Question question;
-	
-	@OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-	private List<Answer> answerList;
-
 
 }
