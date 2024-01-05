@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.mysite.sbb.Question;
 import com.mysite.sbb.QuestionRepository;
 
+import jakarta.transaction.Transactional;
+
 
 @SpringBootTest
 class SbbApplicationTests {
@@ -27,17 +29,15 @@ class SbbApplicationTests {
 	@Autowired
 	private AnswerRepository answerRepository;
 	
+	@Transactional
 	@Test
 	void testJpa() {
 		Optional<Question> oq = this.questionRepository.findById(2);
 		assertTrue(oq.isPresent());
 		Question q = oq.get();
-		
-		Answer a = new Answer();
-		a.setContent("네 자동으로 생성됩니다.");
-		a.setQuestion(q); // 어떤 질문의 답변인지 알기위해서 Question 객체가 필요하다
-		a.setCreateDate(LocalDateTime.now());
-		this.answerRepository.save(a);
+		List<Answer> answerList = q.getAnswerList();
+		assertEquals(1, answerList.size());
+		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
 		
 	}
 }
